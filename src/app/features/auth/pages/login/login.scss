@@ -1,0 +1,239 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'sass:color';
+
+.auth-container {
+    @include flex-center;
+    min-height: calc(100vh - 64px);
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 450px;
+
+    @include respond-to('md') {
+        padding: 3rem;
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+
+    @include respond-to('md') {
+        font-size: 2rem;
+    }
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    color: $text-secondary;
+    margin: 0;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    &--error {
+        background-color: rgba($danger-color, 0.1);
+        color: $danger-color;
+        border: 1px solid rgba($danger-color, 0.3);
+    }
+}
+
+.alert-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+}
+
+.required-indicator {
+    color: $danger-color;
+    margin-left: 0.25rem;
+}
+
+.form-input {
+    padding: 0.75rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    @include transition();
+
+    &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &--error {
+        border-color: $danger-color;
+
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($danger-color, 0.1);
+        }
+    }
+
+    &::placeholder {
+        color: $text-secondary;
+    }
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    @include flex-center;
+    color: $text-secondary;
+    @include transition(color 0.3s ease);
+
+    &:hover {
+        color: $text-primary;
+    }
+
+    &:focus {
+        outline: 2px solid $primary-color;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.form-error {
+    font-size: 0.875rem;
+    color: $danger-color;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    @include transition();
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    &--primary {
+        background-color: $primary-color;
+        color: white;
+
+        &:hover:not(:disabled) {
+            background-color: color.mix(black, $primary-color, 10%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba($primary-color, 0.3);
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+        }
+    }
+
+    &--full {
+        width: 100%;
+    }
+}
+
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.auth-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.auth-footer-text {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    margin: 0;
+}
+
+.auth-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.25rem;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:focus {
+        outline: 2px solid $primary-color;
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+}
