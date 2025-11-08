@@ -1,0 +1,212 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.navbar {
+    background-color: $navbar-bg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    @include flex-center;
+    justify-content: space-between;
+    min-height: 64px;
+
+    @include respond-to('md') {
+        padding: 0 2rem;
+    }
+}
+
+.navbar-brand {
+    @include flex-center;
+    justify-content: space-between;
+    width: 100%;
+
+    @include respond-to('md') {
+        width: auto;
+    }
+}
+
+.brand-link {
+    text-decoration: none;
+    @include flex-center;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $primary-color;
+    @include transition(color);
+
+    &:hover {
+        color: color-mix(in srgb, $primary-color 90%, black 10%);
+    }
+}
+
+.menu-toggle {
+    @include flex-center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+
+    @include respond-to('md') {
+        display: none;
+    }
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    span {
+        display: block;
+        height: 3px;
+        width: 100%;
+        background-color: $text-primary;
+        border-radius: 2px;
+        @include transition;
+    }
+
+    &.open {
+        span:nth-child(1) {
+            transform: translateY(8.5px) rotate(45deg);
+        }
+
+        span:nth-child(2) {
+            opacity: 0;
+        }
+
+        span:nth-child(3) {
+            transform: translateY(-8.5px) rotate(-45deg);
+        }
+    }
+}
+
+.navbar-menu {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: $navbar-bg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+
+    &.active {
+        display: block;
+    }
+
+    @include respond-to('md') {
+        display: block;
+        position: static;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @include respond-to('md') {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+    }
+}
+
+.nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: $text-primary;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 4px;
+    @include transition;
+
+    &:hover {
+        background-color: color-mix(in srgb, $primary-color 10%, transparent 90%);
+        color: $primary-color;
+    }
+
+    &.active {
+        color: $primary-color;
+        background-color: color-mix(in srgb, $primary-color 10%, transparent 90%);
+    }
+
+    @include respond-to('md') {
+        padding: 0.5rem 1rem;
+    }
+}
+
+.nav-user {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: $text-secondary;
+    font-size: 0.875rem;
+
+    @include respond-to('md') {
+        padding: 0.5rem 1rem;
+    }
+}
+
+.nav-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    @include transition;
+    font-size: 1rem;
+
+    @include respond-to('md') {
+        width: auto;
+        padding: 0.5rem 1.25rem;
+    }
+
+    &--primary {
+        background-color: $primary-color;
+        color: white;
+
+        &:hover {
+            background-color: color-mix(in srgb, $primary-color 90%, black 10%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px color-mix(in srgb, $primary-color 30%, transparent 70%);
+        }
+
+        &.active {
+            background-color: color-mix(in srgb, $primary-color 90%, black 10%);
+        }
+    }
+
+    &--logout {
+        background-color: transparent;
+        color: $danger-color;
+        border: 1px solid $danger-color;
+
+        &:hover {
+            background-color: $danger-color;
+            color: white;
+        }
+    }
+}
