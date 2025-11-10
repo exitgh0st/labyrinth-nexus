@@ -1,0 +1,43 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-content {
+  text-align: center;
+}
+
+.home-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0 0 1rem 0;
+
+  @include respond-to('md') {
+    font-size: 2.5rem;
+  }
+}
+
+.home-subtitle {
+  font-size: 1.25rem;
+  color: $text-secondary;
+  margin: 0 0 2rem 0;
+}
+
+.home-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.home-message {
+  font-size: 1rem;
+  color: $text-primary;
+  margin: 0;
+}
