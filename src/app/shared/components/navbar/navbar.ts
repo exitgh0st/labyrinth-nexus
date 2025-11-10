@@ -12,7 +12,6 @@ import { AuthStore } from '../../../features/auth/services/auth-store';
 })
 export class Navbar {
   private authStore = inject(AuthStore);
-  private router = inject(Router);
   
   isMenuOpen = signal(false);
   isAuthenticated = this.authStore.isAuthenticated;

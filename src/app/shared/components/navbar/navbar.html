@@ -35,6 +35,15 @@
               </a>
             </li>
             <li>
+              <a 
+                routerLink="/users" 
+                routerLinkActive="active"
+                class="nav-link"
+                (click)="closeMenu()">
+                Users
+              </a>
+            </li>
+            <li>
               <span class="nav-user">{{ currentUser()?.displayName }}</span>
             </li>
             <li>

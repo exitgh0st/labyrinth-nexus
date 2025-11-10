@@ -18,6 +18,11 @@ export const routes: Routes = [
     loadChildren: () => import('./features/home/home.routes').then(m => m.HOME_ROUTES),
     canActivateChild: [authGuard]
   },
+  {
+    path: 'users',
+    loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES),
+    canActivateChild: [authGuard]
+  }
   // {
   //   path: '**',
   //   redirectTo: '/home'
