@@ -76,7 +76,7 @@
         width: 100%;
         background-color: $text-primary;
         border-radius: 2px;
-        @include transition;
+        @include transition();
     }
 
     &.open {
@@ -138,7 +138,7 @@
     text-decoration: none;
     font-weight: 500;
     border-radius: 4px;
-    @include transition;
+    @include transition();
 
     &:hover {
         background-color: color-mix(in srgb, $primary-color 10%, transparent 90%);
@@ -176,7 +176,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    @include transition;
+    @include transition();
     font-size: 1rem;
 
     @include respond-to('md') {
