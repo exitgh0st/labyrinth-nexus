@@ -1,7 +1,7 @@
 import { Role } from "../../role/models/role.model";
 
 export interface User {
-    id: number;
+    id: string;
     email: string;
     passwordHash: string;
     emailVerified: boolean;
