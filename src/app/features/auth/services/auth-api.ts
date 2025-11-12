@@ -13,7 +13,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   name: string;
-  confirmPassword?: string; // Optional, can validate on frontend
+  confirmPassword?: string;
 }
 
 export interface AuthResponse {
@@ -26,7 +26,7 @@ export interface AuthResponse {
 })
 export class AuthApi {
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl; // Change this
+  private apiUrl = environment.apiUrl;
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     // Refresh token comes back as HTTP-only cookie automatically
