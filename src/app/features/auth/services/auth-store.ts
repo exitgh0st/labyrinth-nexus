@@ -24,16 +24,6 @@ export class AuthStore {
   readonly currentUser = this.user.asReadonly();
   readonly isAuthenticated = computed(() => this.accessToken() !== null && this.user() !== null);
 
-  private initializationPromise: Promise<void> | null = null;
-
-  // Optional: Log authentication state changes
-  constructor() {
-    effect(() => {
-      const authenticated = this.isAuthenticated();
-      console.log('Auth state changed:', authenticated ? 'Authenticated' : 'Not authenticated');
-    });
-  }
-
   /**
    * Login user with credentials
    */
