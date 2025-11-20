@@ -60,7 +60,6 @@ export class UserList implements OnInit {
         this.users.set(response.data);
         this.total.set(response.total);
         this.loading.set(false);
-        console.log(this.users());
       },
       error: (err) => {
         this.error.set('Failed to load users');

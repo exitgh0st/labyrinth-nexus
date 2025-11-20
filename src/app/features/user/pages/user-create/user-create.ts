@@ -42,7 +42,6 @@ export class UserCreate {
 
   handleCreate(userData: Partial<User>) {
     this.isLoading.set(true);
-    console.log(userData);
     this.userApi.createUser(userData).subscribe({
       next: (newUser: User) => {
         console.log('User created:', newUser);
