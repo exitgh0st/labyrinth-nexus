@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
 import { guestGuard } from './features/auth/guards/guest.guard';
+import { roleGuard } from './features/auth/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -16,12 +17,12 @@ export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./features/home/home.routes').then(m => m.HOME_ROUTES),
-    canActivateChild: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'users',
     loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES),
-    canActivateChild: [authGuard]
+    canActivate: [authGuard, roleGuard(['ADMIN'])]
   }
   // {
   //   path: '**',
