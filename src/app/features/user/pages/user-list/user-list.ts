@@ -75,7 +75,11 @@ export class UserList implements OnInit {
   }
 
   editUser(id: string): void {
-    this.router.navigate(['/users/edit', id]);
+    this.router.navigate(['/users', id, 'edit']);
+  }
+
+  viewUser(id: string): void {
+    this.router.navigate(['/users', id]);
   }
 
   deleteUser(id: string): void {
@@ -85,7 +89,8 @@ export class UserList implements OnInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
+      heightAuto: false
     }).then(result => {
       if (result.isConfirmed) {
         this.userApi.deleteUser(id).subscribe({
@@ -114,4 +119,6 @@ export class UserList implements OnInit {
       this.loadUsers();
     }
   }
+
+  
 }

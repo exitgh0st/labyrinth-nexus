@@ -11,12 +11,16 @@ export const USER_ROUTES: Routes = [
         loadComponent: () => import('./pages/user-list/user-list').then(m => m.UserList)
       },
       {
-        path: ':id/edit',
-        loadComponent: () => import('./pages/user-edit/user-edit').then(m => m.UserEdit)
-      },
-      {
         path: 'create',
         loadComponent: () => import('./pages/user-create/user-create').then(m => m.UserCreate)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./pages/user-details/user-details').then(m => m.UserDetails)
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () => import('./pages/user-edit/user-edit').then(m => m.UserEdit)
       }
     ]
   }

@@ -1,1 +1,9 @@
-<p>user-create works!</p>
+<div class="page-container">
+    <app-user-form
+      [availableRoles]="availableRoles()"
+      [isEditMode]="false"
+      [isLoading]="isLoading()"
+      (formSubmit)="handleCreate($event)"
+      (formCancel)="handleCancel()"
+    />
+  </div>
