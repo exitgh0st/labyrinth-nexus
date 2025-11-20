@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { tap, catchError, throwError, BehaviorSubject, Observable, filter, switchMap, take, of, firstValueFrom } from 'rxjs';
 import { AuthApi, AuthResponse, LoginRequest, RegisterRequest } from './auth-api';
 import { User } from '../../user/models/user.model';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -138,7 +137,7 @@ export class AuthStore {
   hasRole(role: string): boolean {
     const user = this.user();
     // Adjust based on your user object structure
-    return user?.userRoles?.some(r => r.name === role) ?? false;
+    return user?.roles?.some(r => r.name === role) ?? false;
   }
 
   /**

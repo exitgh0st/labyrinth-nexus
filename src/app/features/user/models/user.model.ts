@@ -3,7 +3,7 @@ import { Role } from "../../role/models/role.model";
 export interface User {
     id: string;
     email: string;
-    passwordHash: string;
+    password?: string;
     emailVerified: boolean;
     emailVerifiedAt: string | null;
     firstName?: string;
@@ -20,5 +20,6 @@ export interface User {
     createdAt?: string;
     updatedAt?: string;
 
-    userRoles?: Role[];
+    roles?: Role[];
+    roleIds?: number[]
 }
