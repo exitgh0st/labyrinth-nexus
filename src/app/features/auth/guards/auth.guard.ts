@@ -1,5 +1,5 @@
 import { inject, PLATFORM_ID } from '@angular/core';
-import { Router, CanActivateChildFn } from '@angular/router';
+import { Router, CanActivateFn } from '@angular/router';
 import { AuthStore } from '../services/auth-store';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -9,7 +9,7 @@ function navigateToLoginPage(router: Router, returnUrl: string): void {
   });
 }
 
-export const authGuard: CanActivateChildFn = async (route, state) => {
+export const authGuard: CanActivateFn = async (route, state) => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
