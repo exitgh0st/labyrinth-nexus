@@ -51,6 +51,7 @@ export class Login {
 
     this.authStore.login(this.loginForm.value).subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.router.navigate(['/home']);
       },
       error: (error) => {

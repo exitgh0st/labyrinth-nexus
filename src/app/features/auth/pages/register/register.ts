@@ -72,6 +72,7 @@ export class Register {
 
     this.authStore.register(this.registerForm.value).subscribe({
       next: () => {
+        this.isLoading.set(false);
         this.router.navigate(['/home']);
       },
       error: (error) => {
