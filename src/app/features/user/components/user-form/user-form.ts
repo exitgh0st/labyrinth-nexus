@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../models/user.model';
 import { Role } from '../../../role/models/role.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-form',
@@ -131,12 +132,12 @@ export class UserForm {
     const confirmPassword = this.userForm.value.confirmPassword;
 
     if (!this.isEditMode() && password !== confirmPassword) {
-      alert('Passwords do not match');
+      this.userForm.get('confirmPassword')?.setErrors({ mismatch: true });
       return;
     }
 
     if (this.isEditMode() && password && password !== confirmPassword) {
-      alert('Passwords do not match');
+      this.userForm.get('confirmPassword')?.setErrors({ mismatch: true });
       return;
     }
 
@@ -154,11 +155,9 @@ export class UserForm {
     }
 
     if (this.selectedRoles().length > 0) {
-      console.log("FA", this.selectedRoles);
       formData.roleIds = this.selectedRoles().map(r => r.id);
     }
 
-    console.log(formData);
     this.formSubmit.emit(formData);
   }
 
