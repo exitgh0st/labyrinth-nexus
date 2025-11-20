@@ -56,7 +56,7 @@ export class UserApi {
   }
 
   updateUser(id: string, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(
+    return this.http.patch<User>(
       `${this.apiUrl}/users/${id}`,
       user,
       { withCredentials: true }
