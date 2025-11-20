@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RoleApi } from '../../../role/services/role-api';
 import { UserForm } from '../../components/user-form/user-form';
 import { isPlatformBrowser } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-create',
@@ -50,8 +51,12 @@ export class UserCreate {
       },
       error: (error) => {
         console.error('Failed to create user:', error);
-        alert('Failed to create user. Please try again.');
         this.isLoading.set(false);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to create user',
+          text: 'Please try again.',
+        });
       }
     });
   }
