@@ -1,11 +1,17 @@
 import { CanActivateFn, Router } from "@angular/router";
 import { AuthStore } from "../services/auth-store";
-import { inject } from "@angular/core";
+import { inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 
 export function roleGuard(allowedRoles: string[]): CanActivateFn {
     return (route, state) => {
         const authStore = inject(AuthStore);
         const router = inject(Router);
+        const platformId = inject(PLATFORM_ID);
+
+        if (!isPlatformBrowser(platformId)) {
+            return true;
+        }
 
         if (!authStore.isAuthenticated()) {
             router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
@@ -15,7 +21,7 @@ export function roleGuard(allowedRoles: string[]): CanActivateFn {
         const hasRequiredRole = allowedRoles.some(role => authStore.hasRole(role));
 
         if (!hasRequiredRole) {
-            router.navigate(['/unauthorized']);
+            router.navigate(['/home']);
             return false;
         }
 
