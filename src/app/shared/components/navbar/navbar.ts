@@ -2,6 +2,7 @@ import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthStore } from '../../../features/auth/services/auth-store';
+import { RoleEnum } from '../../../features/role/enums/role.enum';
 
 @Component({
   selector: 'app-navbar',
@@ -29,5 +30,9 @@ export class Navbar {
     this.authStore.logout().subscribe(() => {
       this.closeMenu();
     });
+  }
+
+  isAdmin() {
+    return this.currentUser()?.roles?.some(r => r.name === RoleEnum.ADMIN) ?? false;
   }
 }

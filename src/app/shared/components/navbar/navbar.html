@@ -1,39 +1,40 @@
 <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <div class="navbar-container">
-      <div class="navbar-brand">
-        <a routerLink="/home" class="brand-link" (click)="closeMenu()">
-          <span class="brand-name">YourApp</span>
-        </a>
-        <button 
-          class="menu-toggle" 
-          type="button"
-          [attr.aria-expanded]="isMenuOpen()"
-          aria-controls="navbar-menu"
-          aria-label="Toggle navigation menu"
-          (click)="toggleMenu()">
-          <span class="hamburger-icon" [class.open]="isMenuOpen()">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-        </button>
-      </div>
-  
-      <div 
-        id="navbar-menu"
-        class="navbar-menu" 
-        [class.active]="isMenuOpen()">
-        <ul class="nav-links">
-          @if (isAuthenticated()) {
-            <li>
-              <a 
-                routerLink="/home" 
-                routerLinkActive="active"
-                class="nav-link"
-                (click)="closeMenu()">
-                Home
-              </a>
-            </li>
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/home" class="brand-link" (click)="closeMenu()">
+        <span class="brand-name">YourApp</span>
+      </a>
+      <button 
+        class="menu-toggle" 
+        type="button"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-controls="navbar-menu"
+        aria-label="Toggle navigation menu"
+        (click)="toggleMenu()">
+        <span class="hamburger-icon" [class.open]="isMenuOpen()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+    </div>
+
+    <div 
+      id="navbar-menu"
+      class="navbar-menu" 
+      [class.active]="isMenuOpen()">
+      <ul class="nav-links">
+        @if (isAuthenticated()) {
+          <li>
+            <a 
+              routerLink="/home" 
+              routerLinkActive="active"
+              class="nav-link"
+              (click)="closeMenu()">
+              Home
+            </a>
+          </li>
+          @if (isAdmin()) {
             <li>
               <a 
                 routerLink="/users" 
@@ -43,38 +44,39 @@
                 Users
               </a>
             </li>
-            <li>
-              <span class="nav-user">{{ currentUser()?.displayName }}</span>
-            </li>
-            <li>
-              <button 
-                class="nav-button nav-button--logout" 
-                type="button"
-                (click)="logout()">
-                Logout
-              </button>
-            </li>
-          } @else {
-            <li>
-              <a 
-                routerLink="/login" 
-                routerLinkActive="active"
-                class="nav-link"
-                (click)="closeMenu()">
-                Login
-              </a>
-            </li>
-            <li>
-              <a 
-                routerLink="/auth/register"
-                routerLinkActive="active" 
-                class="nav-button nav-button--primary"
-                (click)="closeMenu()">
-                Register
-              </a>
-            </li>
           }
-        </ul>
-      </div>
+          <li>
+            <span class="nav-user">{{ currentUser()?.displayName }}</span>
+          </li>
+          <li>
+            <button 
+              class="nav-button nav-button--logout" 
+              type="button"
+              (click)="logout()">
+              Logout
+            </button>
+          </li>
+        } @else {
+          <li>
+            <a 
+              routerLink="/login" 
+              routerLinkActive="active"
+              class="nav-link"
+              (click)="closeMenu()">
+              Login
+            </a>
+          </li>
+          <li>
+            <a 
+              routerLink="/auth/register"
+              routerLinkActive="active" 
+              class="nav-button nav-button--primary"
+              (click)="closeMenu()">
+              Register
+            </a>
+          </li>
+        }
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
