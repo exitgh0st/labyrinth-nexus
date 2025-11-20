@@ -12,6 +12,7 @@ import { RoleEnum } from '../../../features/role/enums/role.enum';
   styleUrls: ['./navbar.scss']
 })
 export class Navbar {
+  appName = signal("Nexus");
   private authStore = inject(AuthStore);
   
   isMenuOpen = signal(false);
