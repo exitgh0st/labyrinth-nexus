@@ -52,7 +52,7 @@ export class RoleApi {
   }
 
   updateRole(id: number, role: Partial<Role>): Observable<Role> {
-    return this.http.put<Role>(
+    return this.http.patch<Role>(
       `${this.apiUrl}/roles/${id}`,
       role,
       { withCredentials: true }

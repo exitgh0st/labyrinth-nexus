@@ -1,0 +1,74 @@
+<div class="role-form-container">
+    <div class="form-header">
+      <h2>{{ isEditMode() ? 'Edit Role' : 'Create New Role' }}</h2>
+    </div>
+  
+    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="role-form">
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name" class="form-label">
+          Role Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="form-control"
+          [class.error]="roleForm.get('name')?.touched && roleForm.get('name')?.invalid"
+          placeholder="Administrator"
+        />
+        @if (getFieldError('name')) {
+          <span class="error-message">{{ getFieldError('name') }}</span>
+        }
+      </div>
+  
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          rows="4"
+          placeholder="Describe the role's purpose and permissions"
+        ></textarea>
+      </div>
+  
+      <!-- Is Active -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="isActive"
+            class="form-checkbox"
+          />
+          <span>Active Role</span>
+        </label>
+        <small class="help-text">Inactive roles cannot be assigned to users</small>
+      </div>
+  
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="isLoading()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="loading-spinner"></span>
+            <span>{{ isEditMode() ? 'Updating...' : 'Creating...' }}</span>
+          } @else {
+            <span>{{ isEditMode() ? 'Update Role' : 'Create Role' }}</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>

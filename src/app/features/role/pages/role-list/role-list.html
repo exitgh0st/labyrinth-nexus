@@ -1,1 +1,72 @@
-<p>role-list works!</p>
+<div class="role-list-container">
+    <div class="header">
+      <h1>Roles</h1>
+      <button class="btn btn-primary" (click)="createRole()">Create Role</button>
+    </div>
+  
+    @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+    </div>
+    }
+  
+    @if (loading()) {
+    <div class="loading">
+      Loading roles...
+    </div>
+    }
+  
+    @if (!loading() && roles() && roles().length === 0) {
+    <div class="no-roles">
+      No roles found
+    </div>
+    }
+  
+    @if (!loading() && roles() && roles().length > 0) {
+    <table class="role-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (role of roles(); track role.id) {
+        <tr>
+          <td class="role-name">{{ role.name }}</td>
+          <td class="role-description">{{ role.description || 'No description' }}</td>
+          <td>
+            <span [class]="role.isActive ? 'status-active' : 'status-inactive'">
+              {{ role.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>{{ formatDate(role.createdAt) }}</td>
+          <td class="actions">
+            <button class="btn btn-small btn-secondary" (click)="editRole(role.id)">
+              Edit
+            </button>
+            <button class="btn btn-small btn-danger" (click)="deleteRole(role.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  
+    <div class="pagination">
+      <button class="btn btn-secondary" (click)="previousPage()" [disabled]="!hasPreviousPage()">
+        Previous
+      </button>
+      <span class="page-info">
+        Page {{ currentPage() }} of {{ totalPages() }} ({{ total() }} total)
+      </span>
+      <button class="btn btn-secondary" (click)="nextPage()" [disabled]="!hasNextPage()">
+        Next
+      </button>
+    </div>
+    }
+  </div>

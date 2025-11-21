@@ -23,9 +23,14 @@ export const routes: Routes = [
     path: 'users',
     loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES),
     canActivate: [authGuard, roleGuard(['ADMIN'])]
+  },
+  {
+    path: 'roles',
+    loadChildren: () => import('./features/role/role.routes').then(m => m.ROLE_ROUTES),
+    canActivate: [authGuard, roleGuard(['ADMIN'])]
+  },
+  {
+    path: '**',
+    redirectTo: '/home'
   }
-  // {
-  //   path: '**',
-  //   redirectTo: '/home'
-  // }
 ];
