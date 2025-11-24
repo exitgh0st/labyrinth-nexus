@@ -29,20 +29,18 @@ export class AuthApi {
   private apiUrl = environment.apiUrl;
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    // Refresh token comes back as HTTP-only cookie automatically
     return this.http.post<AuthResponse>(
       `${this.apiUrl}/auth/login`,
       credentials,
-      { withCredentials: true } // Important! Sends cookies
+      { withCredentials: true }
     );
   }
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
-    // Refresh token comes back as HTTP-only cookie automatically
     return this.http.post<AuthResponse>(
       `${this.apiUrl}/auth/register`,
       userData,
-      { withCredentials: true } // Important! Sends cookies
+      { withCredentials: true }
     );
   }
 
@@ -55,7 +53,6 @@ export class AuthApi {
   }
 
   refreshToken(): Observable<AuthResponse> {
-    // Refresh token is sent automatically via HTTP-only cookie
     return this.http.post<AuthResponse>(
       `${this.apiUrl}/auth/refresh`,
       {},
@@ -63,10 +60,30 @@ export class AuthApi {
     );
   }
 
-  // Optional: If you have a "get current user" endpoint
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(
       `${this.apiUrl}/auth/me`,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Get Google OAuth authorization URL
+   * This doesn't make an HTTP request - just constructs the URL
+   */
+  getGoogleOAuthUrl(): string {
+    return `${this.apiUrl}/auth/oauth/google`;
+  }
+
+  /**
+   * Exchange OAuth code/state for access token
+   * Call this after OAuth redirect callback
+   */
+  handleOAuthCallback(): Observable<AuthResponse> {
+    // The backend should set the tokens via cookies after OAuth success
+    // This endpoint retrieves the auth data after redirect
+    return this.http.get<AuthResponse>(
+      `${this.apiUrl}/auth/oauth/callback`,
       { withCredentials: true }
     );
   }

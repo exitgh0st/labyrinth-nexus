@@ -1,6 +1,6 @@
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap, catchError, throwError, BehaviorSubject, Observable, filter, switchMap, take, of, firstValueFrom } from 'rxjs';
+import { tap, catchError, throwError, BehaviorSubject, Observable, switchMap, firstValueFrom } from 'rxjs';
 import { AuthApi, AuthResponse, LoginRequest, RegisterRequest } from './auth-api';
 import { User } from '../../user/models/user.model';
 
@@ -11,12 +11,12 @@ export class AuthStore {
   private authApi = inject(AuthApi);
   private router = inject(Router);
 
-  // 🔥 In-memory storage using Angular signals
+  // In-memory storage using Angular signals
   private accessToken = signal<string | null>(null);
   user = signal<User | null>(null);
   private isInitialized = signal(false);
 
-  // Track if a refresh is in progress to prevent multiple simultaneous refreshes
+  // Track if a refresh is in progress
   private isRefreshing$ = new BehaviorSubject<boolean>(false);
 
   // Public read-only computed signals
@@ -58,6 +58,23 @@ export class AuthStore {
   }
 
   /**
+   * Handle OAuth login callback
+   * Returns the auth response or null if failed
+   */
+  async handleOAuthLogin(): Promise<AuthResponse | null> {
+    try {
+      const response = await firstValueFrom(this.authApi.handleOAuthCallback());
+      this.setAuth(response);
+      console.log('OAuth login successful');
+      return response;
+    } catch (error) {
+      console.error('OAuth login failed:', error);
+      this.clearAuth();
+      return null;
+    }
+  }
+
+  /**
    * Logout user and clear all auth data
    */
   logout(): Observable<void> {
@@ -68,7 +85,6 @@ export class AuthStore {
         this.router.navigate(['/login']);
       }),
       catchError(error => {
-        // Even if logout fails on backend, clear local state
         console.error('Logout error:', error);
         this.clearAuth();
         this.router.navigate(['/login']);
@@ -79,7 +95,6 @@ export class AuthStore {
 
   /**
    * Refresh the access token using the HTTP-only refresh cookie
-   * Prevents multiple simultaneous refresh calls
    */
   refreshAccessToken(): Observable<string> {
     return this.authApi.refreshToken().pipe(
@@ -97,8 +112,6 @@ export class AuthStore {
       catchError(error => {
         console.error('Token refresh failed:', error);
         this.isRefreshing$.next(false);
-
-        // Refresh failed, user needs to log in again
         this.clearAuth();
         this.router.navigate(['/login']);
         return throwError(() => error);
@@ -113,30 +126,31 @@ export class AuthStore {
     return this.accessToken();
   }
 
-  async initializeAuth(): Promise<void>{
+  /**
+   * Initialize auth state on app startup
+   */
+  async initializeAuth(): Promise<void> {
     if (this.isInitialized()) {
       return;
     }
-  
 
     try {
       const response = await firstValueFrom(this.authApi.refreshToken());
       this.accessToken.set(response.accessToken);
       this.user.set(response.user);
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
+      console.log('Auth initialization failed:', error);
       return;
     } finally {
-      this.isInitialized.set(true)
+      this.isInitialized.set(true);
     }
   }
 
   /**
-   * Check if user has a specific role (if your backend provides roles)
+   * Check if user has a specific role
    */
   hasRole(role: string): boolean {
     const user = this.user();
-    // Adjust based on your user object structure
     return user?.roles?.some(r => r.name === role) ?? false;
   }
 
@@ -165,12 +179,10 @@ export class AuthStore {
   private clearAuth(): void {
     this.accessToken.set(null);
     this.user.set(null);
-    // Don't reset isInitialized - we want to know we've tried
   }
 
   /**
    * Force clear everything including initialized state
-   * Use this only in special cases like forced logout
    */
   hardReset(): void {
     this.clearAuth();

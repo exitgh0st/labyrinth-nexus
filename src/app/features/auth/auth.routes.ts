@@ -13,6 +13,10 @@ export const AUTH_ROUTES: Routes = [
       {
         path: 'register',
         loadComponent: () => import('./pages/register/register').then(m => m.Register)
+      },
+      {
+        path: 'google/callback',
+        loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
       }
     ]
   }

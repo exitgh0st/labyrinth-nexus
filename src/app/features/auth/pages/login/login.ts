@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../services/auth-store';
+import { GoogleSignin } from '../../components/google-signin/google-signin';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, GoogleSignin],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
