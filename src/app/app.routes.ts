@@ -30,6 +30,11 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['ADMIN'])]
   },
   {
+    path: 'sessions',
+    loadChildren: () => import('./features/session/session.routes').then(m => m.SESSION_ROUTES),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: '/home'
   }

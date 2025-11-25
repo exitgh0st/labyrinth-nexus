@@ -1,0 +1,16 @@
+@if (showWarning()) {
+    <div class="timeout-warning-overlay">
+      <div class="timeout-warning-modal">
+        <h2>Session Expiring Soon</h2>
+        <p>Your session will expire in <strong>{{ timeRemaining() }}</strong> seconds due to inactivity.</p>
+        <div class="warning-actions">
+          <button class="btn btn-primary" (click)="extendSession()">
+            Stay Logged In
+          </button>
+          <button class="btn btn-secondary" (click)="logoutNow()">
+            Logout Now
+          </button>
+        </div>
+      </div>
+    </div>
+  }
