@@ -1,0 +1,171 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>
+      <mat-icon>settings</mat-icon>
+      Settings
+    </h1>
+    <p class="subtitle">Manage your preferences and application settings</p>
+  </div>
+
+  <div class="settings-content">
+    <!-- Notifications Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>notifications</mat-icon>
+          Notifications
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <form [formGroup]="notificationForm" class="settings-form">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Email Notifications</h3>
+              <p>Receive email updates about your account activity</p>
+            </div>
+            <mat-slide-toggle formControlName="emailNotifications"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Push Notifications</h3>
+              <p>Get push notifications on your devices</p>
+            </div>
+            <mat-slide-toggle formControlName="pushNotifications"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Weekly Digest</h3>
+              <p>Receive a weekly summary of your activity</p>
+            </div>
+            <mat-slide-toggle formControlName="weeklyDigest"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Security Alerts</h3>
+              <p>Get notified about security-related events</p>
+            </div>
+            <mat-slide-toggle formControlName="securityAlerts"></mat-slide-toggle>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Appearance Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>palette</mat-icon>
+          Appearance
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <form [formGroup]="appearanceForm" class="settings-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Theme</mat-label>
+            <mat-select formControlName="theme">
+              <mat-option value="light">Light</mat-option>
+              <mat-option value="dark">Dark</mat-option>
+              <mat-option value="auto">Auto (System)</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>brightness_6</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="language">
+              <mat-option value="en">English</mat-option>
+              <mat-option value="es">Español</mat-option>
+              <mat-option value="fr">Français</mat-option>
+              <mat-option value="de">Deutsch</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>language</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Display Density</mat-label>
+            <mat-select formControlName="density">
+              <mat-option value="compact">Compact</mat-option>
+              <mat-option value="comfortable">Comfortable</mat-option>
+              <mat-option value="spacious">Spacious</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>view_comfortable</mat-icon>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Privacy Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>shield</mat-icon>
+          Privacy & Security
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <form [formGroup]="privacyForm" class="settings-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Profile Visibility</mat-label>
+            <mat-select formControlName="profileVisibility">
+              <mat-option value="public">Public</mat-option>
+              <mat-option value="friends">Friends Only</mat-option>
+              <mat-option value="private">Private</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>visibility</mat-icon>
+          </mat-form-field>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Show Activity Status</h3>
+              <p>Let others see when you're online</p>
+            </div>
+            <mat-slide-toggle formControlName="showActivity"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Allow Direct Messages</h3>
+              <p>Enable other users to send you messages</p>
+            </div>
+            <mat-slide-toggle formControlName="allowMessages"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Data Sharing</h3>
+              <p>Share anonymous usage data to improve the platform</p>
+            </div>
+            <mat-slide-toggle formControlName="dataSharing"></mat-slide-toggle>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actions -->
+    <div class="settings-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="saveSettings()"
+        [disabled]="isSaving()">
+        @if (isSaving()) {
+          <mat-icon>hourglass_empty</mat-icon>
+          Saving...
+        } @else {
+          <mat-icon>save</mat-icon>
+          Save Settings
+        }
+      </button>
+      <button mat-stroked-button (click)="resetSettings()">
+        <mat-icon>refresh</mat-icon>
+        Reset to Defaults
+      </button>
+    </div>
+  </div>
+</div>
