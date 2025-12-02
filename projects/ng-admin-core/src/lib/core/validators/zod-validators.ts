@@ -104,20 +104,49 @@ export class ZodValidators {
       try {
         // Validate the entire form value
         schema.parse(control.value);
+
+        // Clear all field errors on successful validation
+        Object.keys(control.value || {}).forEach(fieldName => {
+          const fieldControl = control.get(fieldName);
+          if (fieldControl && fieldControl.hasError('zod')) {
+            const currentErrors = { ...fieldControl.errors };
+            delete currentErrors['zod'];
+            fieldControl.setErrors(Object.keys(currentErrors).length > 0 ? currentErrors : null, { emitEvent: false });
+          }
+        });
+
         return null; // Validation passed
       } catch (error) {
         if (error instanceof ZodError) {
+          // First, clear all previous zod errors
+          Object.keys(control.value || {}).forEach(fieldName => {
+            const fieldControl = control.get(fieldName);
+            if (fieldControl && fieldControl.hasError('zod')) {
+              const currentErrors = { ...fieldControl.errors };
+              delete currentErrors['zod'];
+              fieldControl.setErrors(Object.keys(currentErrors).length > 0 ? currentErrors : null, { emitEvent: false });
+            }
+          });
+
           // Convert Zod errors to Angular ValidationErrors format
           const errors: ValidationErrors = {};
 
           error.issues.forEach((err) => {
             // Map errors to their respective fields
             const field = err.path[0] as string;
-            if (field && !errors[field]) {
-              // Store error on the field itself
+            if (field) {
               const fieldControl = control.get(field);
               if (fieldControl) {
-                errors[field] = err.message;
+                // Set the error directly on the field control
+                const currentErrors = fieldControl.errors || {};
+                fieldControl.setErrors({
+                  ...currentErrors,
+                  zod: err.message
+                }, { emitEvent: false });
+
+                if (!errors[field]) {
+                  errors[field] = err.message;
+                }
               }
             }
           });
