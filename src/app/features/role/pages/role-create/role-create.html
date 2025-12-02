@@ -1,0 +1,8 @@
+<div class="page-container">
+    <app-role-form
+      [isEditMode]="false"
+      [isLoading]="isLoading()"
+      (formSubmit)="handleCreate($event)"
+      (formCancel)="handleCancel()"
+    />
+  </div>

@@ -1,0 +1,118 @@
+<div class="role-list-container">
+  <!-- Header with title and create button -->
+  <div class="header">
+    <h1>Roles</h1>
+    <button mat-raised-button color="primary" (click)="create()">
+      <mat-icon>add</mat-icon>
+      Create Role
+    </button>
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="error-message">
+      <mat-icon>error</mat-icon>
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Loading state with skeleton -->
+  @if (loading()) {
+    <div class="table-container">
+      <app-skeleton-loader [rows]="5" [columns]="5" type="table" />
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && items().length === 0) {
+    <app-empty-state
+      icon="shield"
+      title="No roles found"
+      message="Get started by creating your first role to manage permissions"
+      actionText="Create Role"
+      (action)="create()"
+    />
+  }
+
+  <!-- Data table -->
+  @if (!loading() && items().length > 0) {
+    <div class="table-container">
+      <table mat-table [dataSource]="items()" class="role-table">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let role" class="role-name">
+            <mat-icon class="role-icon">shield</mat-icon>
+            {{ role.name }}
+          </td>
+        </ng-container>
+
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let role" class="role-description">
+            {{ role.description || 'No description' }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let role">
+            <mat-chip [color]="getStatusColor(role)">
+              {{ getStatusText(role) }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Created</th>
+          <td mat-cell *matCellDef="let role">
+            {{ formatDate(role.createdAt) }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let role" class="actions-cell">
+            <button
+              mat-icon-button
+              color="accent"
+              (click)="edit(role.id)"
+              matTooltip="Edit role"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="delete(role.id)"
+              matTooltip="Delete role"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="table-row"
+        ></tr>
+      </table>
+
+      <!-- Paginator -->
+      <mat-paginator
+        [length]="total()"
+        [pageSize]="query.take"
+        [pageIndex]="currentPage() - 1"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      />
+    </div>
+  }
+</div>

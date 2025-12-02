@@ -1,0 +1,63 @@
+<div class="role-form-container">
+  <div class="form-header">
+    <h2>{{ isEditMode() ? 'Edit Role' : 'Create New Role' }}</h2>
+  </div>
+
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="role-form">
+    <!-- Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Role Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Administrator"
+        required
+      />
+      <mat-icon matPrefix>shield</mat-icon>
+      <mat-error>{{ getFieldError('name') }}</mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        rows="4"
+        placeholder="Describe the role's purpose and permissions"
+      ></textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-error>{{ getFieldError('description') }}</mat-error>
+    </mat-form-field>
+
+    <!-- Active Status -->
+    <div class="checkbox-group">
+      <mat-checkbox formControlName="isActive" color="primary">
+        Active Role
+      </mat-checkbox>
+      <mat-hint>Inactive roles cannot be assigned to users</mat-hint>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="isLoading() || roleForm.invalid"
+      >
+        <mat-icon>save</mat-icon>
+        {{ isEditMode() ? 'Update Role' : 'Create Role' }}
+      </button>
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()"
+        [disabled]="isLoading()"
+      >
+        <mat-icon>cancel</mat-icon>
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

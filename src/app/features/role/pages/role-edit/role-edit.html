@@ -1,0 +1,15 @@
+<div class="page-container">
+    @if (role()) {
+    <app-role-form 
+      [role]="role()" 
+      [isEditMode]="true" 
+      [isLoading]="isLoading()"
+      (formSubmit)="handleUpdate($event)" 
+      (formCancel)="handleCancel()" 
+    />
+    } @else if (isLoading()) {
+    <div class="loading">Loading role...</div>
+    } @else {
+    <div class="error">Role not found</div>
+    }
+  </div>
