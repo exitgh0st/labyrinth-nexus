@@ -17,21 +17,21 @@ export const routes: Routes = [
   // Profile route (authentication required)
   {
     path: 'profile',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/profile/pages/profile/profile').then(m => m.Profile),
     canActivate: [authGuard]
   },
 
   // Reports route (requires specific permission)
   {
     path: 'reports',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/reports/pages/reports/reports').then(m => m.Reports),
     canActivate: [authGuard, roleGuard(undefined, ['reports:view'])]
   },
 
   // Settings route (requires specific permission)
   {
     path: 'settings',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/settings/pages/settings/settings').then(m => m.Settings),
     canActivate: [authGuard, roleGuard(undefined, ['settings:edit'])]
   },
 
@@ -59,7 +59,7 @@ export const routes: Routes = [
   // Admin settings (requires admin role and settings permission)
   {
     path: 'admin/settings',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/admin-settings/pages/admin-settings/admin-settings').then(m => m.AdminSettings),
     canActivate: [authGuard, roleGuard(['admin'], ['settings:edit'])]
   },
 
