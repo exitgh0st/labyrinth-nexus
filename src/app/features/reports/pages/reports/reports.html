@@ -1,0 +1,247 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>
+          <mat-icon>assessment</mat-icon>
+          Reports & Analytics
+        </h1>
+        <p class="subtitle">Generate insights and track key metrics</p>
+      </div>
+      <div class="header-actions">
+        <mat-form-field appearance="outline" class="period-select">
+          <mat-label>Time Period</mat-label>
+          <mat-select [(value)]="selectedPeriod">
+            <mat-option value="today">Today</mat-option>
+            <mat-option value="week">This Week</mat-option>
+            <mat-option value="month">This Month</mat-option>
+            <mat-option value="quarter">This Quarter</mat-option>
+            <mat-option value="year">This Year</mat-option>
+            <mat-option value="custom">Custom Range</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary">
+          <mat-icon>file_download</mat-icon>
+          Export All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-tab-group class="reports-tabs">
+    <!-- Overview Tab -->
+    <mat-tab label="Overview">
+      <div class="tab-content">
+        <!-- Summary Stats -->
+        <mat-card class="summary-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>analytics</mat-icon>
+              Summary Statistics
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <table mat-table [dataSource]="summaryData()" class="summary-table">
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef>Category</th>
+                <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">
+                  <strong>{{ formatValue(element.category, element.value) }}</strong>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="change">
+                <th mat-header-cell *matHeaderCellDef>Change</th>
+                <td mat-cell *matCellDef="let element">
+                  <span
+                    class="change-badge"
+                    [class.positive]="element.change > 0"
+                    [class.negative]="element.change < 0">
+                    {{ element.change > 0 ? '+' : '' }}{{ element.change.toFixed(1) }}%
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="trend">
+                <th mat-header-cell *matHeaderCellDef>Trend</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon
+                    class="trend-icon"
+                    [class.trend-up]="element.trend === 'up'"
+                    [class.trend-down]="element.trend === 'down'">
+                    {{ element.trend === 'up' ? 'trending_up' : 'trending_down' }}
+                  </mat-icon>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Available Reports Tab -->
+    <mat-tab label="Available Reports">
+      <div class="tab-content">
+        <div class="reports-grid">
+          @for (report of availableReports; track report.id) {
+            <mat-card class="report-card">
+              <div class="report-icon" [style.background-color]="report.color + '20'">
+                <mat-icon [style.color]="report.color">{{ report.icon }}</mat-icon>
+              </div>
+              <mat-card-header>
+                <mat-card-title>{{ report.name }}</mat-card-title>
+                <mat-card-subtitle>{{ report.description }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="report-meta">
+                  <div class="meta-item">
+                    <mat-icon>schedule</mat-icon>
+                    <span>{{ report.frequency }}</span>
+                  </div>
+                  @if (report.lastGenerated) {
+                    <div class="meta-item">
+                      <mat-icon>update</mat-icon>
+                      <span>{{ getRelativeTime(report.lastGenerated) }}</span>
+                    </div>
+                  }
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="generateReport(report)">
+                  <mat-icon>play_arrow</mat-icon>
+                  Generate
+                </button>
+                <button mat-button (click)="scheduleReport(report)">
+                  <mat-icon>event</mat-icon>
+                  Schedule
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Recent Reports Tab -->
+    <mat-tab label="Recent Reports">
+      <div class="tab-content">
+        <mat-card class="recent-reports-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>history</mat-icon>
+              Recently Generated
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="recent-reports-list">
+              @for (report of recentReports(); track report.name) {
+                <div class="recent-report-item">
+                  <div class="report-info">
+                    <div class="report-icon-small">
+                      <mat-icon>description</mat-icon>
+                    </div>
+                    <div class="report-details">
+                      <h3>{{ report.name }}</h3>
+                      <p>{{ report.type }}</p>
+                      <div class="report-meta-small">
+                        <span>
+                          <mat-icon>access_time</mat-icon>
+                          {{ getRelativeTime(report.generated) }}
+                        </span>
+                        <span>
+                          <mat-icon>storage</mat-icon>
+                          {{ report.size }}
+                        </span>
+                        <span class="status-badge" [class]="report.status">
+                          {{ report.status }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="report-actions">
+                    <button mat-icon-button (click)="downloadReport(report)">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                      <mat-icon>share</mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Custom Reports Tab -->
+    <mat-tab label="Custom Reports">
+      <div class="tab-content">
+        <mat-card class="custom-report-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>tune</mat-icon>
+              Create Custom Report
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="custom-report-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Report Name</mat-label>
+                <input matInput placeholder="Enter report name">
+                <mat-icon matPrefix>label</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Report Type</mat-label>
+                <mat-select>
+                  <mat-option value="users">User Analytics</mat-option>
+                  <mat-option value="performance">Performance Metrics</mat-option>
+                  <mat-option value="security">Security Events</mat-option>
+                  <mat-option value="revenue">Revenue Analysis</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="date-range">
+                <mat-form-field appearance="outline">
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>End Date</mat-label>
+                  <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+                  <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="form-actions">
+                <button mat-raised-button color="primary">
+                  <mat-icon>add_chart</mat-icon>
+                  Generate Report
+                </button>
+                <button mat-stroked-button>
+                  <mat-icon>save</mat-icon>
+                  Save Template
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
