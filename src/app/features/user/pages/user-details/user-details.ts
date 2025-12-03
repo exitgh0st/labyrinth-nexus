@@ -57,7 +57,7 @@ export class UserDetails {
   onEdit(): void {
     const currentUser = this.user();
     if (currentUser) {
-      this.router.navigate(['/users', currentUser.id, 'edit']);
+      this.router.navigate(['admin/users', currentUser.id, 'edit']);
     }
   }
   
@@ -153,7 +153,7 @@ export class UserDetails {
   }
   
   onBackToList(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/admin/users']);
   }
   
   // Helper methods

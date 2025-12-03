@@ -42,7 +42,7 @@ export class UserCreate {
     this.userApi.create(userData).subscribe({
       next: (newUser: User) => {
         console.log('User created:', newUser);
-        this.router.navigate(['/users', newUser.id]);
+        this.router.navigate(['admin/users', newUser.id]);
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -58,6 +58,6 @@ export class UserCreate {
   }
 
   handleCancel(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['admin/users']);
   }
 }

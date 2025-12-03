@@ -68,7 +68,7 @@ export class RoleEdit {
           showConfirmButton: false,
           heightAuto: false
         }).then(() => {
-          this.router.navigate(['/roles']);
+          this.router.navigate(['admin/roles']);
         });
       },
       error: (error) => {
@@ -85,6 +85,6 @@ export class RoleEdit {
   }
 
   handleCancel(): void {
-    this.router.navigate(['/roles']);
+    this.router.navigate(['admin/roles']);
   }
 }

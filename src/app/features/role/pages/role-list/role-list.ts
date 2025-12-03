@@ -32,7 +32,7 @@ import { BaseListComponent, SkeletonLoader, EmptyState } from 'ng-admin-core';
 })
 export class RoleList extends BaseListComponent<Role, number> {
   protected override apiService = inject(RoleApi);
-  protected override baseRoute = '/roles';
+  protected override baseRoute = 'admin/roles';
   protected override itemName = 'role';
 
   /**

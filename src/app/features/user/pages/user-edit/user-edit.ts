@@ -86,7 +86,7 @@ export class UserEdit {
           showConfirmButton: false,
           heightAuto: false
         }).then(() => {
-          this.router.navigate(['/users', currentUser.id]);
+          this.router.navigate(['admin/users', currentUser.id]);
         });
       },
       error: (error) => {
@@ -98,6 +98,6 @@ export class UserEdit {
   }
 
   handleCancel(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate(['admin/users']);
   }
 }

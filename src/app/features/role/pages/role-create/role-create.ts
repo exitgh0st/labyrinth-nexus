@@ -33,7 +33,7 @@ export class RoleCreate {
           showConfirmButton: false,
           heightAuto: false
         }).then(() => {
-          this.router.navigate(['/roles']);
+          this.router.navigate(['admin/roles']);
         });
       },
       error: (error) => {
@@ -50,6 +50,6 @@ export class RoleCreate {
   }
 
   handleCancel(): void {
-    this.router.navigate(['/roles']);
+    this.router.navigate(['admin/roles']);
   }
 }
