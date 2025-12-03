@@ -155,11 +155,15 @@
         (click)="saveSettings()"
         [disabled]="isSaving()">
         @if (isSaving()) {
-          <mat-icon>hourglass_empty</mat-icon>
-          Saving...
+          <ng-container>
+            <mat-icon>hourglass_empty</mat-icon>
+            Saving...
+          </ng-container>
         } @else {
-          <mat-icon>save</mat-icon>
-          Save Settings
+          <ng-container>
+            <mat-icon>save</mat-icon>
+            Save Settings
+          </ng-container>
         }
       </button>
       <button mat-stroked-button (click)="resetSettings()">
