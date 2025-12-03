@@ -40,7 +40,6 @@ export class Profile {
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-    phone: [''],
   });
 
   passwordForm: FormGroup = this.fb.group({
@@ -93,7 +92,6 @@ export class Profile {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         email: user.email || '',
-        phone: user.phone || '',
       });
     }
   }
@@ -124,7 +122,6 @@ export class Profile {
       this.authService.updateUser({
         firstName: formValue.firstName,
         lastName: formValue.lastName,
-        phone: formValue.phone,
       });
 
       this.isSaving.set(false);
