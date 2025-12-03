@@ -9,14 +9,14 @@
           <h1>{{ user()?.firstName }} {{ user()?.lastName }}</h1>
           <p class="email">{{ user()?.email }}</p>
           @if (userRoles().length > 0) {
-            <div class="roles-chips">
-              @for (role of userRoles(); track role) {
-                <mat-chip class="role-chip">
-                  <mat-icon>badge</mat-icon>
-                  {{ role }}
-                </mat-chip>
-              }
-            </div>
+          <div class="roles-chips">
+            @for (role of userRoles(); track role) {
+            <mat-chip class="role-chip">
+              <mat-icon>badge</mat-icon>
+              {{ role }}
+            </mat-chip>
+            }
+          </div>
           }
         </div>
       </div>
@@ -42,10 +42,10 @@
         </mat-card-title>
         <div class="header-actions">
           @if (!isEditing()) {
-            <button mat-button (click)="toggleEdit()">
-              <mat-icon>edit</mat-icon>
-              Edit
-            </button>
+          <button mat-button (click)="toggleEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
           }
         </div>
       </mat-card-header>
@@ -55,64 +55,50 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>First Name</mat-label>
-              <input
-                matInput
-                formControlName="firstName"
-                [readonly]="!isEditing()"
-                placeholder="Enter first name">
+              <input matInput formControlName="firstName" [readonly]="!isEditing()" placeholder="Enter first name">
               <mat-icon matPrefix>person_outline</mat-icon>
               @if (getErrorMessage(profileForm, 'firstName')) {
-                <mat-error>{{ getErrorMessage(profileForm, 'firstName') }}</mat-error>
+              <mat-error>{{ getErrorMessage(profileForm, 'firstName') }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Last Name</mat-label>
-              <input
-                matInput
-                formControlName="lastName"
-                [readonly]="!isEditing()"
-                placeholder="Enter last name">
+              <input matInput formControlName="lastName" [readonly]="!isEditing()" placeholder="Enter last name">
               <mat-icon matPrefix>person_outline</mat-icon>
               @if (getErrorMessage(profileForm, 'lastName')) {
-                <mat-error>{{ getErrorMessage(profileForm, 'lastName') }}</mat-error>
+              <mat-error>{{ getErrorMessage(profileForm, 'lastName') }}</mat-error>
               }
             </mat-form-field>
           </div>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Email</mat-label>
-            <input
-              matInput
-              type="email"
-              formControlName="email"
-              placeholder="Enter email">
+            <input matInput type="email" formControlName="email" placeholder="Enter email">
             <mat-icon matPrefix>email</mat-icon>
             <mat-hint>Email cannot be changed</mat-hint>
           </mat-form-field>
 
           @if (isEditing()) {
-            <div class="form-actions">
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="saveProfile()"
-                [disabled]="profileForm.invalid || isSaving()">
-                @if (isSaving()) {
-                  <mat-icon>hourglass_empty</mat-icon>
-                  Saving...
-                } @else {
-                  <mat-icon>save</mat-icon>
-                  Save Changes
-                }
-              </button>
-              <button
-                mat-stroked-button
-                (click)="toggleEdit()"
-                [disabled]="isSaving()">
-                Cancel
-              </button>
-            </div>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" (click)="saveProfile()"
+              [disabled]="profileForm.invalid || isSaving()">
+              @if (isSaving()) {
+              <ng-container>
+                <mat-icon>hourglass_empty</mat-icon>
+                Saving...
+              </ng-container>
+              } @else {
+              <ng-container>
+                <mat-icon>save</mat-icon>
+                Save Changes
+              </ng-container>
+              }
+            </button>
+            <button mat-stroked-button (click)="toggleEdit()" [disabled]="isSaving()">
+              Cancel
+            </button>
+          </div>
           }
         </form>
       </mat-card-content>
@@ -133,49 +119,33 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Current Password</mat-label>
-            <input
-              matInput
-              type="password"
-              formControlName="currentPassword"
-              placeholder="Enter current password">
+            <input matInput type="password" formControlName="currentPassword" placeholder="Enter current password">
             <mat-icon matPrefix>lock_outline</mat-icon>
             @if (getErrorMessage(passwordForm, 'currentPassword')) {
-              <mat-error>{{ getErrorMessage(passwordForm, 'currentPassword') }}</mat-error>
+            <mat-error>{{ getErrorMessage(passwordForm, 'currentPassword') }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>New Password</mat-label>
-            <input
-              matInput
-              type="password"
-              formControlName="newPassword"
-              placeholder="Enter new password">
+            <input matInput type="password" formControlName="newPassword" placeholder="Enter new password">
             <mat-icon matPrefix>lock</mat-icon>
             @if (getErrorMessage(passwordForm, 'newPassword')) {
-              <mat-error>{{ getErrorMessage(passwordForm, 'newPassword') }}</mat-error>
+            <mat-error>{{ getErrorMessage(passwordForm, 'newPassword') }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Confirm New Password</mat-label>
-            <input
-              matInput
-              type="password"
-              formControlName="confirmPassword"
-              placeholder="Confirm new password">
+            <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm new password">
             <mat-icon matPrefix>lock</mat-icon>
             @if (getErrorMessage(passwordForm, 'confirmPassword')) {
-              <mat-error>{{ getErrorMessage(passwordForm, 'confirmPassword') }}</mat-error>
+            <mat-error>{{ getErrorMessage(passwordForm, 'confirmPassword') }}</mat-error>
             }
           </mat-form-field>
 
           <div class="form-actions">
-            <button
-              mat-raised-button
-              color="accent"
-              (click)="changePassword()"
-              [disabled]="passwordForm.invalid">
+            <button mat-raised-button color="accent" (click)="changePassword()" [disabled]="passwordForm.invalid">
               <mat-icon>key</mat-icon>
               Change Password
             </button>
@@ -186,25 +156,25 @@
 
     <!-- Permissions Card -->
     @if (userPermissions().length > 0) {
-      <mat-card class="info-card">
-        <mat-card-header>
-          <mat-card-title>
-            <mat-icon>verified_user</mat-icon>
-            Permissions
-          </mat-card-title>
-        </mat-card-header>
-        <mat-divider></mat-divider>
-        <mat-card-content>
-          <div class="permissions-grid">
-            @for (permission of userPermissions(); track permission) {
-              <div class="permission-item">
-                <mat-icon>check_circle</mat-icon>
-                <span>{{ permission }}</span>
-              </div>
-            }
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>verified_user</mat-icon>
+          Permissions
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <div class="permissions-grid">
+          @for (permission of userPermissions(); track permission) {
+          <div class="permission-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ permission }}</span>
           </div>
-        </mat-card-content>
-      </mat-card>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
     }
   </div>
 </div>
