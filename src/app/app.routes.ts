@@ -26,7 +26,7 @@ export const routes: Routes = [
   {
     path: 'reports',
     loadComponent: () => import('./features/reports/pages/reports/reports').then(m => m.Reports),
-    canActivate: [authGuard, roleGuard(undefined)]
+    canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
   },
 
   // Settings route (requires specific permission)
@@ -40,7 +40,7 @@ export const routes: Routes = [
   {
     path: 'admin/users',
     loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES),
-    canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
+    // canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
   },
 
   // Role management routes (requires admin role)
