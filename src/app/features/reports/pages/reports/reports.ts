@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 interface Report {
   id: string;
@@ -43,6 +44,7 @@ interface ReportData {
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    FormsModule
   ],
   templateUrl: './reports.html',
   styleUrl: './reports.scss'
