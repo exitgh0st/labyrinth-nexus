@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,7 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
-import { AuthService } from 'ng-admin-core';
+import { AuthService, ZodValidators, ValidationMessageService, DialogService } from 'ng-admin-core';
+import { UserApi } from '../../../user/services/user-api';
+import { profileUpdateSchema, passwordChangeSchema } from '../../../../shared/schemas/validation.schemas';
 
 @Component({
   selector: 'app-profile',
@@ -30,6 +32,9 @@ import { AuthService } from 'ng-admin-core';
 export class Profile {
   private fb = inject(FormBuilder);
   protected authService = inject(AuthService);
+  protected userApi = inject(UserApi);
+  protected validationService = inject(ValidationMessageService);
+  private dialogService = inject(DialogService);
 
   isEditing = signal(false);
   isSaving = signal(false);
@@ -37,15 +42,19 @@ export class Profile {
   user = computed(() => this.authService.user());
 
   profileForm: FormGroup = this.fb.group({
-    firstName: ['', [Validators.required, Validators.minLength(2)]],
-    lastName: ['', [Validators.required, Validators.minLength(2)]],
-    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    firstName: [''],
+    lastName: [''],
+    email: [{ value: '', disabled: true }],
+  }, {
+    validators: ZodValidators.formGroup(profileUpdateSchema)
   });
 
   passwordForm: FormGroup = this.fb.group({
-    currentPassword: ['', [Validators.required, Validators.minLength(8)]],
-    newPassword: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
+    currentPassword: [''],
+    newPassword: [''],
+    confirmPassword: [''],
+  }, {
+    validators: ZodValidators.formGroup(passwordChangeSchema)
   });
 
   userRoles = computed(() => {
@@ -111,54 +120,79 @@ export class Profile {
       return;
     }
 
+    const user = this.user();
+    if (!user?.id) {
+      console.error('No user ID available');
+      return;
+    }
+
     this.isSaving.set(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const formValue = this.profileForm.getRawValue();
-      console.log('Saving profile:', formValue);
+    const formValue = this.profileForm.getRawValue();
+    const updateData = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+    };
 
-      // Update auth service user
-      this.authService.updateUser({
-        firstName: formValue.firstName,
-        lastName: formValue.lastName,
-      });
+    this.userApi.update(user.id, updateData).subscribe({
+      next: async (updatedUser) => {
+        // Update auth service user with the response from API
+        this.authService.updateUser({
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+        });
 
-      this.isSaving.set(false);
-      this.isEditing.set(false);
-    }, 1000);
+        await this.dialogService.success('Profile updated successfully');
+        this.isSaving.set(false);
+        this.isEditing.set(false);
+      },
+      error: async (error) => {
+        console.error('Error saving profile:', error);
+        const errorMessage = error.error?.message || 'Failed to update profile. Please try again.';
+        await this.dialogService.error('Update Failed', errorMessage);
+        this.isSaving.set(false);
+      }
+    });
   }
 
   changePassword(): void {
     if (this.passwordForm.invalid) {
-      Object.keys(this.passwordForm.controls).forEach(key => {
-        this.passwordForm.controls[key].markAsTouched();
-      });
+      this.passwordForm.markAllAsTouched();
       return;
     }
 
-    const { newPassword, confirmPassword } = this.passwordForm.value;
-    if (newPassword !== confirmPassword) {
-      this.passwordForm.controls['confirmPassword'].setErrors({ mismatch: true });
+    const { currentPassword, newPassword } = this.passwordForm.value;
+
+    const user = this.user();
+    if (!user?.id) {
+      console.error('No user ID available');
       return;
     }
 
-    console.log('Changing password...');
-    // Implement password change logic
-    this.passwordForm.reset();
+    this.userApi.updatePassword(user.id, currentPassword, newPassword).subscribe({
+      next: async () => {
+        await this.dialogService.success('Password changed successfully');
+      },
+      error: async (error) => {
+        console.error('Error changing password:', error);
+
+        // Handle specific error cases
+        if (error.status === 401 || error.status === 400) {
+          const errorMessage = error.error?.message || 'Current password is incorrect';
+          await this.dialogService.error('Password Change Failed', errorMessage);
+          this.passwordForm.controls['currentPassword'].setErrors({
+            custom: 'Current password is incorrect'
+          });
+        } else {
+          const errorMessage = error.error?.message || 'Failed to change password. Please try again.';
+          await this.dialogService.error('Password Change Failed', errorMessage);
+        }
+      }
+    });
   }
 
   getErrorMessage(form: FormGroup, field: string): string {
     const control = form.get(field);
-    if (!control || !control.errors || !control.touched) return '';
-
-    if (control.errors['required']) return `${field} is required`;
-    if (control.errors['email']) return 'Invalid email address';
-    if (control.errors['minlength']) {
-      return `Minimum ${control.errors['minlength'].requiredLength} characters required`;
-    }
-    if (control.errors['mismatch']) return 'Passwords do not match';
-
-    return 'Invalid input';
+    return this.validationService.getErrorMessage(control);
   }
 }

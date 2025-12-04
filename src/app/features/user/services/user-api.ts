@@ -45,4 +45,19 @@ export class UserApi extends BaseApiService<User, string> {
       { params, withCredentials: true }
     );
   }
+
+  /**
+   * Updates a user's password
+   * @param userId - The user identifier
+   * @param currentPassword - The user's current password
+   * @param newPassword - The new password to set
+   * @returns Observable that completes when password is updated
+   */
+  updatePassword(userId: string, currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.patch<void>(
+      `${this.getResourceUrl(userId)}/password`,
+      { currentPassword, password: newPassword },
+      { withCredentials: true }
+    );
+  }
 }
