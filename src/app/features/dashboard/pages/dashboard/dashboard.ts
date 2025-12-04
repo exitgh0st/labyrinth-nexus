@@ -74,29 +74,25 @@ export class Dashboard {
       title: 'Total Users',
       value: this.totalUsers(),
       icon: 'people',
-      color: '#667eea',
-      trend: { value: 12, isPositive: true }
+      color: '#667eea'
     },
     {
       title: 'Active Sessions',
       value: this.activeSessions(),
       icon: 'trending_up',
-      color: '#4caf50',
-      trend: { value: 8, isPositive: true }
+      color: '#4caf50'
     },
     {
       title: 'Pending Tasks',
       value: '23',
       icon: 'assignment',
-      color: '#ff9800',
-      trend: { value: 5, isPositive: false }
+      color: '#ff9800'
     },
     {
       title: 'Total Revenue',
       value: '$45.6k',
       icon: 'attach_money',
-      color: '#2196f3',
-      trend: { value: 15, isPositive: true }
+      color: '#2196f3'
     }
   ]);
 
