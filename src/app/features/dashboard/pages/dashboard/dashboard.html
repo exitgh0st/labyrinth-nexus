@@ -18,7 +18,7 @@
 
   <!-- Stats Grid -->
   <div class="stats-grid">
-    @for (stat of stats; track stat.title) {
+    @for (stat of stats(); track stat.title) {
       <mat-card class="stat-card">
         <div class="stat-icon" [style.background-color]="stat.color + '20'">
           <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>

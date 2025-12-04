@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { AuthService, PermissionService, CanDirective } from 'ng-admin-core';
+import { UserApi } from '../../../user/services/user-api';
+import { SessionStore } from '../../../session/services/session-store';
 
 interface StatCard {
   title: string;
@@ -46,6 +48,11 @@ interface QuickAction {
 export class Dashboard {
   protected authService = inject(AuthService);
   protected permissionService = inject(PermissionService);
+  private userApi = inject(UserApi);
+  private sessionStore = inject(SessionStore);
+
+  totalUsers = signal<number>(0);
+  activeSessions = signal<number>(0);
 
   greeting = computed(() => {
     const hour = new Date().getHours();
@@ -62,17 +69,17 @@ export class Dashboard {
     return user?.email?.split('@')[0] || 'User';
   });
 
-  stats: StatCard[] = [
+  stats = computed<StatCard[]>(() => [
     {
       title: 'Total Users',
-      value: '1,234',
+      value: this.totalUsers(),
       icon: 'people',
       color: '#667eea',
       trend: { value: 12, isPositive: true }
     },
     {
       title: 'Active Sessions',
-      value: '456',
+      value: this.activeSessions(),
       icon: 'trending_up',
       color: '#4caf50',
       trend: { value: 8, isPositive: true }
@@ -91,7 +98,7 @@ export class Dashboard {
       color: '#2196f3',
       trend: { value: 15, isPositive: true }
     }
-  ];
+  ]);
 
   quickActions: QuickAction[] = [
     {
@@ -149,6 +156,32 @@ export class Dashboard {
       color: '#ff9800'
     }
   ]);
+
+  ngOnInit(): void {
+    this.loadDashboardStats();
+  }
+
+  loadDashboardStats(): void {
+    // Load total users count
+    this.userApi.getAll().subscribe({
+      next: (response) => {
+        this.totalUsers.set(response.total);
+      },
+      error: (error) => {
+        console.error('Failed to load total users:', error);
+      }
+    });
+
+    // Load active sessions count
+    this.sessionStore.getActiveSessions().subscribe({
+      next: (sessions) => {
+        this.activeSessions.set(sessions.length);
+      },
+      error: (error) => {
+        console.error('Failed to load active sessions:', error);
+      }
+    });
+  }
 
   getRelativeTime(date: Date): string {
     const now = new Date();
