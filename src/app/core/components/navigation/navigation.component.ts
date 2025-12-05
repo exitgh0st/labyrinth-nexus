@@ -91,6 +91,11 @@ export class NavigationComponent {
       icon: 'person'
     },
     {
+      label: 'My Sessions',
+      route: '/sessions',
+      icon: 'devices'
+    },
+    {
       label: 'Reports',
       route: '/reports',
       icon: 'assessment',
