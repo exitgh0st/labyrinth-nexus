@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { AuthService, PermissionService, CanDirective } from 'ng-admin-core';
 import { UserApi } from '../../../user/services/user-api';
-import { SessionStore } from '../../../session/services/session-store';
+import { SessionApi } from '../../../session/services/session-api';
 
 interface StatCard {
   title: string;
@@ -49,10 +49,11 @@ export class Dashboard {
   protected authService = inject(AuthService);
   protected permissionService = inject(PermissionService);
   private userApi = inject(UserApi);
-  private sessionStore = inject(SessionStore);
+  private sessionApi = inject(SessionApi);
 
   totalUsers = signal<number>(0);
   activeSessions = signal<number>(0);
+  recentLogins = signal<number>(0);
 
   greeting = computed(() => {
     const hour = new Date().getHours();
@@ -83,15 +84,15 @@ export class Dashboard {
       color: '#4caf50'
     },
     {
-      title: 'Pending Tasks',
-      value: '23',
-      icon: 'assignment',
+      title: 'Recent Logins',
+      value: this.recentLogins(),
+      icon: 'login',
       color: '#ff9800'
     },
     {
-      title: 'Total Revenue',
-      value: '$45.6k',
-      icon: 'attach_money',
+      title: 'Storage Used',
+      value: '2.4 GB',
+      icon: 'storage',
       color: '#2196f3'
     }
   ]);
@@ -143,13 +144,6 @@ export class Dashboard {
       description: 'You updated your profile information',
       timestamp: new Date(Date.now() - 1000 * 60 * 30),
       color: '#2196f3'
-    },
-    {
-      icon: 'notification_important',
-      title: 'New notification',
-      description: 'You have a new notification',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60),
-      color: '#ff9800'
     }
   ]);
 
@@ -168,10 +162,21 @@ export class Dashboard {
       }
     });
 
-    // Load active sessions count
-    this.sessionStore.getActiveSessions().subscribe({
+    // Load active sessions count and calculate recent logins
+    this.sessionApi.getMyActiveSessions().subscribe({
       next: (sessions) => {
         this.activeSessions.set(sessions.length);
+
+        // Calculate logins in the last 24 hours
+        const twentyFourHoursAgo = new Date();
+        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+        const recentLoginCount = sessions.filter(session => {
+          const sessionCreated = new Date(session.createdAt);
+          return sessionCreated >= twentyFourHoursAgo;
+        }).length;
+
+        this.recentLogins.set(recentLoginCount);
       },
       error: (error) => {
         console.error('Failed to load active sessions:', error);

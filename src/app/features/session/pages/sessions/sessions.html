@@ -5,7 +5,7 @@
       <h1>Active Sessions</h1>
       <p class="subtitle">Manage your active sessions across all devices</p>
     </div>
-    @if (!loading() && sessionStore.activeSessions().length > 0) {
+    @if (!loading() && sessionApi.activeSessions().length > 0) {
       <button
         mat-raised-button
         color="warn"
@@ -26,7 +26,7 @@
   }
 
   <!-- Empty state -->
-  @if (!loading() && sessionStore.activeSessions().length === 0) {
+  @if (!loading() && sessionApi.activeSessions().length === 0) {
     <lb-empty-state
       icon="devices"
       title="No active sessions"
@@ -36,9 +36,9 @@
   }
 
   <!-- Data table -->
-  @if (!loading() && sessionStore.activeSessions().length > 0) {
+  @if (!loading() && sessionApi.activeSessions().length > 0) {
     <div class="table-container">
-      <table mat-table [dataSource]="sessionStore.activeSessions()" class="sessions-table">
+      <table mat-table [dataSource]="sessionApi.activeSessions()" class="sessions-table">
         <!-- Device Column -->
         <ng-container matColumnDef="device">
           <th mat-header-cell *matHeaderCellDef>Device</th>

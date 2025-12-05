@@ -6,7 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { SessionStore, SessionInfo } from '../../services/session-store';
+import { SessionApi } from '../../services/session-api';
+import { Session } from '../../models/session';
 import { DialogService, NotificationService, SkeletonLoader, EmptyState } from 'ng-admin-core';
 
 /**
@@ -30,7 +31,7 @@ import { DialogService, NotificationService, SkeletonLoader, EmptyState } from '
   styleUrl: './sessions.scss',
 })
 export class Sessions {
-  protected sessionStore = inject(SessionStore);
+  protected sessionApi = inject(SessionApi);
   private dialogService = inject(DialogService);
   private notificationService = inject(NotificationService);
 
@@ -50,9 +51,9 @@ export class Sessions {
    */
   loadSessions(): void {
     this.loading.set(true);
-    this.sessionStore.getActiveSessions().subscribe({
+    this.sessionApi.getMyActiveSessions().subscribe({
       next: (sessions) => {
-        this.sessionStore.activeSessions.set(sessions);
+        this.sessionApi.activeSessions.set(sessions);
         this.loading.set(false);
       },
       error: (error) => {
@@ -75,7 +76,7 @@ export class Sessions {
     });
 
     if (confirmed) {
-      this.sessionStore.revokeSession(sessionId).subscribe({
+      this.sessionApi.revokeMySession(sessionId).subscribe({
         next: () => {
           this.notificationService.success('Session revoked successfully');
           this.loadSessions();
@@ -100,7 +101,7 @@ export class Sessions {
     });
 
     if (confirmed) {
-      this.sessionStore.logoutAllDevices().subscribe({
+      this.sessionApi.logoutAllMyDevices().subscribe({
         next: () => {
           this.notificationService.success('Logged out from all devices');
         },
