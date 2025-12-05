@@ -1,4 +1,4 @@
-# ng-admin-core
+# @labyrinth-team/ng-admin-core
 
 A comprehensive Angular library providing authentication, authorization, and core administrative functionality for Angular applications.
 
@@ -11,14 +11,16 @@ A comprehensive Angular library providing authentication, authorization, and cor
 - **HTTP Interceptors** - Automatic token injection and 401 error handling
 - **Directives** - Conditional rendering based on user permissions
 - **Session Management** - Inactivity timeout, cross-tab synchronization
-- **Base Services** - Reusable API service base classes
+- **Base Services** - Reusable API service base classes with CRUD operations
+- **Base Components** - BaseListComponent for list pages with pagination and filtering
 - **UI Components** - Common admin components (empty states, skeleton loaders)
-- **Validation** - Zod-based form validation utilities
+- **Validation** - Zod-based form validation utilities and schemas
+- **Utilities** - Dialog service, notification service, breakpoint service
 
 ## Installation
 
 ```bash
-npm install ng-admin-core
+npm install @labyrinth-team/ng-admin-core
 ```
 
 ### Peer Dependencies
@@ -50,7 +52,7 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAdminCore, provideAuth, authInterceptor } from 'ng-admin-core';
+import { provideAdminCore, provideAuth, authInterceptor } from '@labyrinth-team/ng-admin-core';
 import { environment } from './environments/environment';
 
 export const appConfig: ApplicationConfig = {
@@ -100,7 +102,7 @@ Create an app initializer service:
 ```typescript
 // src/app/core/services/app-initializer.ts
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from 'ng-admin-core';
+import { AuthService } from '@labyrinth-team/ng-admin-core';
 
 @Injectable({
   providedIn: 'root',
@@ -135,7 +137,7 @@ export const appConfig: ApplicationConfig = {
 ```typescript
 // app.routes.ts
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard, roleGuard } from 'ng-admin-core';
+import { authGuard, guestGuard, roleGuard } from '@labyrinth-team/ng-admin-core';
 
 export const routes: Routes = [
   // Public routes (for unauthenticated users only)
@@ -207,7 +209,7 @@ export const routes: Routes = [
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { AuthService } from 'ng-admin-core';
+import { AuthService } from '@labyrinth-team/ng-admin-core';
 
 @Component({
   selector: 'app-login',
@@ -319,7 +321,7 @@ export class ProfileComponent {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { PermissionService } from 'ng-admin-core';
+import { PermissionService } from '@labyrinth-team/ng-admin-core';
 
 @Component({
   selector: 'app-user-list',
@@ -451,7 +453,7 @@ Protects routes based on roles and permissions:
 You can also pass requirements via route data:
 
 ```typescript
-import { roleGuardWithData } from 'ng-admin-core';
+import { roleGuardWithData } from '@labyrinth-team/ng-admin-core';
 
 {
   path: 'admin',
@@ -473,6 +475,177 @@ The `authInterceptor` automatically:
 - Retries failed requests after token refresh
 
 Already configured in your HTTP client setup.
+
+## Base Components
+
+### BaseListComponent
+
+Extend `BaseListComponent` for list pages with automatic pagination, loading states, and CRUD operations:
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { BaseListComponent } from '@labyrinth-team/ng-admin-core';
+
+@Component({
+  selector: 'app-user-list',
+  templateUrl: './user-list.html',
+})
+export class UserList extends BaseListComponent<User, string> {
+  protected override apiService = inject(UserApi);
+  protected override baseRoute = 'admin/users';
+  protected override itemName = 'user';
+
+  displayedColumns = ['name', 'email', 'roles', 'status', 'actions'];
+  pageSizeOptions = [5, 10, 25, 50];
+}
+```
+
+#### Features Provided by BaseListComponent:
+
+- **Pagination Signals**: Reactive `skip` and `take` signals
+- **State Management**: `items`, `total`, `loading`, `error` signals
+- **CRUD Methods**: `create()`, `edit()`, `view()`, `delete()`
+- **Pagination Methods**: `nextPage()`, `previousPage()`, `goToPage()`, `changePageSize()`
+- **Computed Properties**: `currentPage`, `totalPages`, `hasNextPage`, `hasPreviousPage`
+- **Auto-loading**: Loads items on initialization
+
+#### Template Example:
+
+```html
+<mat-table [dataSource]="items()">
+  <!-- Your columns -->
+</mat-table>
+
+<mat-paginator
+  [length]="total()"
+  [pageSize]="take()"
+  [pageIndex]="currentPage() - 1"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageChange($event)"
+/>
+```
+
+## API Services
+
+### BaseApiService
+
+Extend `BaseApiService` for your custom API services:
+
+```typescript
+import { Injectable } from '@angular/core';
+import { BaseApiService } from '@labyrinth-team/ng-admin-core';
+
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserApiService extends BaseApiService<User, string> {
+  protected override endpoint = '/users';
+
+  // Inherited methods:
+  // - getAll(query?: ListQuery): Observable<ListResponse<User>>
+  // - getById(id: string): Observable<User>
+  // - create(data: Partial<User>): Observable<User>
+  // - update(id: string, data: Partial<User>): Observable<User>
+  // - delete(id: string): Observable<void>
+
+  // Add custom methods
+  activate(id: string): Observable<User> {
+    return this.http.post<User>(`${this.getFullUrl()}/${id}/activate`, {});
+  }
+}
+```
+
+## Core Services
+
+### Dialog Service
+
+```typescript
+import { inject } from '@angular/core';
+import { DialogService } from '@labyrinth-team/ng-admin-core';
+
+const dialogService = inject(DialogService);
+
+// Confirmation dialog
+const confirmed = await dialogService.confirm({
+  title: 'Delete User?',
+  text: 'This action cannot be undone.',
+  icon: 'warning',
+  confirmButtonText: 'Yes, delete',
+  cancelButtonText: 'Cancel'
+});
+
+if (confirmed) {
+  // Perform deletion
+}
+```
+
+### Notification Service
+
+```typescript
+import { inject } from '@angular/core';
+import { NotificationService } from '@labyrinth-team/ng-admin-core';
+
+const notificationService = inject(NotificationService);
+
+// Success notification
+notificationService.success('User created successfully');
+
+// Error notification
+notificationService.error('Failed to create user');
+
+// Info notification
+notificationService.info('Processing your request');
+
+// Warning notification
+notificationService.warning('Please verify your email');
+```
+
+### Breakpoint Service
+
+```typescript
+import { inject } from '@angular/core';
+import { BreakpointService } from '@labyrinth-team/ng-admin-core';
+
+const breakpointService = inject(BreakpointService);
+
+// Reactive signals for different breakpoints
+isMobile = breakpointService.isMobile; // <= 768px
+isTablet = breakpointService.isTablet; // 769px - 1024px
+isDesktop = breakpointService.isDesktop; // >= 1025px
+```
+
+## UI Components
+
+### Empty State
+
+```html
+<lb-empty-state
+  icon="people"
+  title="No users found"
+  message="Get started by creating your first user"
+  actionText="Create User"
+  (action)="createUser()"
+  size="medium"
+/>
+```
+
+### Skeleton Loader
+
+```html
+<!-- Table skeleton -->
+<lb-skeleton-loader [rows]="5" [columns]="4" type="table" />
+
+<!-- Card skeleton -->
+<lb-skeleton-loader type="card" />
+
+<!-- List skeleton -->
+<lb-skeleton-loader [rows]="3" type="list" />
+```
 
 ## Configuration Reference
 
@@ -522,39 +695,6 @@ interface AuthConfig {
     withCredentials?: boolean;           // Default: true
     skipAuthEndpoints?: string[];        // Default: ['/auth/login', '/auth/register', '/auth/refresh']
   };
-}
-```
-
-## API Services
-
-Extend `BaseApiService` for your custom API services:
-
-```typescript
-import { Injectable } from '@angular/core';
-import { BaseApiService } from 'ng-admin-core';
-
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
-@Injectable({ providedIn: 'root' })
-export class UsersApiService extends BaseApiService<User> {
-  protected override endpoint = '/users';
-
-  // Inherited methods:
-  // - list(query?: ListQuery): Observable<ListResponse<User>>
-  // - getById(id: string): Observable<User>
-  // - create(data: Partial<User>): Observable<User>
-  // - update(id: string, data: Partial<User>): Observable<User>
-  // - delete(id: string): Observable<void>
-
-  // Add custom methods
-  activate(id: string): Observable<User> {
-    return this.http.post<User>(`${this.getFullUrl()}/${id}/activate`, {});
-  }
 }
 ```
 
@@ -704,7 +844,7 @@ Build artifacts will be in the `dist/ng-admin-core` directory.
 
 3. Publish to npm:
    ```bash
-   npm publish
+   npm publish --access public
    ```
 
 ## Running Tests
@@ -715,10 +855,14 @@ Execute unit tests:
 ng test ng-admin-core
 ```
 
-## Support
+## Version
 
-For issues and feature requests, please visit the [GitHub repository](https://github.com/yourusername/ng-admin-core).
+Current version: 1.0.0
 
 ## License
 
 MIT
+
+---
+
+Built with ❤️ by the Labyrinth Team

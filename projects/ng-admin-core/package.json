@@ -1,6 +1,26 @@
 {
-  "name": "ng-admin-core",
-  "version": "0.0.1",
+  "name": "@labyrinth-team/ng-admin-core",
+  "version": "1.1.0",
+  "description": "A comprehensive Angular library providing authentication, authorization, and core administrative functionality for Angular applications",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "authentication",
+    "authorization",
+    "admin",
+    "rbac",
+    "jwt",
+    "permissions",
+    "guards",
+    "angular-library"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exitgh0st/labyrinth-vault",
+    "directory": "projects/ng-admin-core"
+  },
+  "homepage": "https://github.com/exitgh0st/labyrinth-vault/tree/master/projects/ng-admin-core",
+  "author": "Labyrinth Team",
   "peerDependencies": {
     "@angular/animations": "^20.0.0",
     "@angular/cdk": "^20.0.0",
