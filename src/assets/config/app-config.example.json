@@ -1,0 +1,7 @@
+{
+  "apiUrl": "http://localhost:3000/api",
+  "appName": "Labyrinth Nexus",
+  "sessionTimeout": 1800000,
+  "inactivityTimeout": 1800000,
+  "refreshBeforeExpiry": 120000
+}

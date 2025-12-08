@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "labyrinth-vault": {
+    "labyrinth-nexus": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "labyrinth-vault:build:production"
+              "buildTarget": "labyrinth-nexus:build:production"
             },
             "development": {
-              "buildTarget": "labyrinth-vault:build:development"
+              "buildTarget": "labyrinth-nexus:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,6 +95,15 @@
               ]
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -120,6 +129,15 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/ng-admin-core/tsconfig.spec.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ng-admin-core/**/*.ts",
+              "projects/ng-admin-core/**/*.html"
+            ]
           }
         }
       }

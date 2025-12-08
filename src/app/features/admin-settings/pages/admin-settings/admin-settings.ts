@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { AppConfigService } from '../../../../core/services/app-config.service';
 
 @Component({
   selector: 'app-admin-settings',
@@ -30,11 +31,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 })
 export class AdminSettings {
   private fb = inject(FormBuilder);
+  private appConfig = inject(AppConfigService);
 
   isSaving = signal(false);
 
   systemForm: FormGroup = this.fb.group({
-    siteName: ['Labyrinth Vault', Validators.required],
+    siteName: [this.appConfig.appName, Validators.required],
     maintenanceMode: [false],
     registrationEnabled: [true],
     apiRateLimit: [100, [Validators.required, Validators.min(1)]],
@@ -53,7 +55,7 @@ export class AdminSettings {
     smtpHost: ['smtp.example.com', Validators.required],
     smtpPort: [587, [Validators.required, Validators.min(1)]],
     smtpUser: ['noreply@example.com', [Validators.required, Validators.email]],
-    smtpFrom: ['Labyrinth Vault', Validators.required],
+    smtpFrom: [this.appConfig.appName, Validators.required],
   });
 
   saveSettings(): void {
