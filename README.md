@@ -1,6 +1,41 @@
-# Labyrinth Vault
+# Labyrinth Nexus
+
+![Angular](https://img.shields.io/badge/Angular-20-red) ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 A modern, secure Angular application with comprehensive authentication and authorization features powered by the **ng-admin-core** library.
+
+## Quick Start
+
+Get up and running in less than 5 minutes:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/labyrinth-nexus.git
+cd labyrinth-nexus
+
+# 2. Run the setup wizard (interactive)
+npm run setup
+
+# 3. Start the development server
+npm start
+```
+
+Navigate to `http://localhost:4200` 🚀
+
+**Alternative (manual setup):**
+```bash
+# Install dependencies
+npm install
+
+# Copy config file
+cp src/assets/config/app-config.example.json src/assets/config/app-config.json
+
+# Edit config (optional)
+# nano src/assets/config/app-config.json
+
+# Start dev server
+npm start
+```
 
 ## Features
 
@@ -51,7 +86,7 @@ A modern, secure Angular application with comprehensive authentication and autho
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd labyrinth-vault
+   cd labyrinth-nexus
    ```
 
 2. Install dependencies:
@@ -59,17 +94,23 @@ A modern, secure Angular application with comprehensive authentication and autho
    npm install
    ```
 
-3. Update environment files:
-   - Development: `src/environments/environment.development.ts`
-   - Production: `src/environments/environment.ts`
-
-   Update the `apiUrl` to point to your backend API:
-   ```typescript
-   export const environment = {
-     production: false,
-     apiUrl: 'http://localhost:3000/api'
-   };
+3. Configure the application:
+   ```bash
+   cp src/assets/config/app-config.example.json src/assets/config/app-config.json
    ```
+
+   Edit `src/assets/config/app-config.json` with your settings:
+   ```json
+   {
+     "apiUrl": "http://localhost:3000/api",
+     "appName": "Labyrinth Nexus",
+     "sessionTimeout": 1800000,
+     "inactivityTimeout": 1800000,
+     "refreshBeforeExpiry": 120000
+   }
+   ```
+
+   **Note**: Configuration is loaded at runtime from this file. The environment files serve as fallbacks.
 
 ## Development
 
@@ -234,7 +275,7 @@ export class MyComponent {
 Build the application:
 
 ```bash
-ng build --configuration production
+npm run build:prod
 ```
 
 Build artifacts will be in the `dist/` directory.
@@ -244,8 +285,72 @@ Build artifacts will be in the `dist/` directory.
 If you make changes to the ng-admin-core library:
 
 ```bash
-ng build ng-admin-core
+npm run build:lib
 ```
+
+## Docker Deployment
+
+### Building the Docker Image
+
+```bash
+docker build -t labyrinth-nexus:latest .
+```
+
+### Running with Docker Compose
+
+The easiest way to run with Docker:
+
+```bash
+docker-compose up -d
+```
+
+### Running the Docker Container
+
+```bash
+docker run -d \
+  -p 80:80 \
+  -e API_URL=https://api.yourdomain.com \
+  -e APP_NAME="My App" \
+  -e SESSION_TIMEOUT=1800000 \
+  --name labyrinth-nexus \
+  labyrinth-nexus:latest
+```
+
+### Environment Variables
+
+Configure the application at runtime:
+
+- `API_URL` - Backend API URL (default: `http://localhost:3000/api`)
+- `APP_NAME` - Application name (default: `Labyrinth Nexus`)
+- `SESSION_TIMEOUT` - Session timeout in ms (default: `1800000`)
+- `INACTIVITY_TIMEOUT` - Inactivity timeout in ms (default: `1800000`)
+- `REFRESH_BEFORE_EXPIRY` - Token refresh time in ms (default: `120000`)
+
+### Docker Health Check
+
+The container includes a health check endpoint at `/health`:
+
+```bash
+docker ps  # Check container health status
+```
+
+## CI/CD
+
+### GitHub Actions
+
+The project includes a complete CI/CD pipeline:
+
+- **Lint** - Code quality checks with ESLint
+- **Test** - Unit tests with coverage reporting
+- **Build** - Production build verification
+- **Security Audit** - Dependency vulnerability scanning
+- **Type Check** - TypeScript compilation check
+
+Workflow runs automatically on:
+- Push to `master` or `develop` branches
+- Pull requests to `master` or `develop`
+
+View workflow status: `.github/workflows/ci.yml`
 
 The library build will be in `dist/ng-admin-core/`.
 
@@ -403,7 +508,7 @@ Your backend API should implement these endpoints:
 
 ## License
 
-[Your License Here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 

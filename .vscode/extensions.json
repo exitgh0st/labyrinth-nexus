@@ -1,4 +1,43 @@
 {
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
-  "recommendations": ["angular.ng-template"]
+  "recommendations": [
+    // Angular
+    "angular.ng-template",
+
+    // Code Quality
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+
+    // Git
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+
+    // TypeScript/JavaScript
+    "ms-vscode.vscode-typescript-next",
+
+    // HTML/CSS/SCSS
+    "ecmel.vscode-html-css",
+    "syler.sass-indented",
+
+    // Utilities
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "naumovs.color-highlight",
+
+    // Testing
+    "hbenl.vscode-jasmine-test-adapter",
+
+    // Docker
+    "ms-azuretools.vscode-docker",
+
+    // REST Client (API testing)
+    "humao.rest-client",
+
+    // Markdown
+    "yzhang.markdown-all-in-one",
+
+    // Icons
+    "vscode-icons-team.vscode-icons"
+  ]
 }
