@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: labyrinth-nexus-frontend
+    ports:
+      - "80:80"
+    environment:
+      # API Configuration
+      - API_URL=http://localhost:3000/api
+
+      # Application Settings
+      - APP_NAME=Labyrinth Nexus
+
+      # Session Configuration (in milliseconds)
+      - SESSION_TIMEOUT=1800000        # 30 minutes
+      - INACTIVITY_TIMEOUT=1800000     # 30 minutes
+      - REFRESH_BEFORE_EXPIRY=120000   # 2 minutes
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+    networks:
+      - labyrinth-network
+
+networks:
+  labyrinth-network:
+    driver: bridge

@@ -1,0 +1,52 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist
+.angular
+
+# Git
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+*.sublime-workspace
+
+# Documentation
+*.md
+!README.md
+
+# Configuration
+.editorconfig
+.prettierrc.json
+.eslintrc.json
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test files
+*.spec.ts
+coverage
+karma.conf.js
+
+# Husky
+.husky
+
+# Claude
+.claude
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+*.log
+tmp
+temp
