@@ -57,9 +57,7 @@ export class Settings {
     this.isSaving.set(true);
 
     setTimeout(() => {
-      console.log('Notifications:', this.notificationForm.value);
-      console.log('Appearance:', this.appearanceForm.value);
-      console.log('Privacy:', this.privacyForm.value);
+      // TODO: Save settings to API
       this.isSaving.set(false);
     }, 1000);
   }

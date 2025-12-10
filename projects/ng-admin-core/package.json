@@ -16,10 +16,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/exitgh0st/labyrinth-vault",
+    "url": "https://github.com/exitgh0st/labyrinth-nexus",
     "directory": "projects/ng-admin-core"
   },
-  "homepage": "https://github.com/exitgh0st/labyrinth-vault/tree/master/projects/ng-admin-core",
+  "homepage": "https://github.com/exitgh0st/labyrinth-nexus/tree/master/projects/ng-admin-core",
   "author": "Labyrinth Team",
   "peerDependencies": {
     "@angular/animations": "^20.0.0",

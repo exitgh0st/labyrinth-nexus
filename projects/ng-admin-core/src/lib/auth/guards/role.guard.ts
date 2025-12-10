@@ -52,16 +52,8 @@ export function roleGuard(
     const router = inject(Router);
     const authConfig = inject(AUTH_CONFIG);
 
-    // Debug logging
-    console.log('[RoleGuard] Checking access for route:', state.url);
-    console.log('[RoleGuard] Required roles:', roles);
-    console.log('[RoleGuard] Required permissions:', permissions);
-    console.log('[RoleGuard] User roles:', permissionService.getRoleNames());
-
     // Check permissions
     const hasAccess = permissionService.canActivateRoute(roles, permissions, requireAll);
-
-    console.log('[RoleGuard] Access granted:', hasAccess);
 
     if (hasAccess) {
       return true;

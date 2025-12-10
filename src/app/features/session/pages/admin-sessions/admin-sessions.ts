@@ -96,7 +96,6 @@ export class AdminSessions {
     // Load total active sessions count
     this.sessionApi.getAllSessions({ skip: 0, take: 0, isRevoked: false }).subscribe({
       next: (response) => {
-        console.log("TOTAL ACTIVE: ", response);
         this.totalActiveSessions.set(response.total || 0);
       },
       error: (err) => {

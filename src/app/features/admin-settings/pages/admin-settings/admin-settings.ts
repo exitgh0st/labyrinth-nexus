@@ -66,9 +66,7 @@ export class AdminSettings {
     this.isSaving.set(true);
 
     setTimeout(() => {
-      console.log('System:', this.systemForm.value);
-      console.log('Security:', this.securityForm.value);
-      console.log('Email:', this.emailForm.value);
+      // TODO: Save admin settings to API
       this.isSaving.set(false);
     }, 1000);
   }

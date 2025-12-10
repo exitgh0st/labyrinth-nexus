@@ -142,23 +142,19 @@ export class Reports {
   }
 
   generateReport(report: Report): void {
-    console.log('Generating report:', report.name);
-    // Implement report generation logic
+    // TODO: Implement report generation logic
   }
 
-  downloadReport(report: any): void {
-    console.log('Downloading report:', report.name);
-    // Implement download logic
+  downloadReport(report: Report): void {
+    // TODO: Implement download logic
   }
 
   exportData(format: string): void {
-    console.log('Exporting data as:', format);
-    // Implement export logic
+    // TODO: Implement export logic
   }
 
   scheduleReport(report: Report): void {
-    console.log('Scheduling report:', report.name);
-    // Implement scheduling logic
+    // TODO: Implement scheduling logic
   }
 
   formatValue(category: string, value: number): string {

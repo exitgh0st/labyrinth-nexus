@@ -23,7 +23,6 @@ export class RoleCreate {
     this.isLoading.set(true);
     this.roleApi.create(roleData).subscribe({
       next: (newRole: Role) => {
-        console.log('Role created:', newRole);
         this.isLoading.set(false);
         Swal.fire({
           title: 'Success!',

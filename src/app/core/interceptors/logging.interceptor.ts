@@ -14,23 +14,12 @@ import { throwError } from 'rxjs';
 export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
   const startTime = Date.now();
 
-  // Log request
-  console.log(`[HTTP] → ${req.method} ${req.url}`, {
-    headers: req.headers.keys(),
-    body: req.body,
-    params: req.params.keys()
-  });
-
   return next(req).pipe(
     tap(event => {
       // Log successful response
       if (event instanceof HttpResponse) {
         const duration = Date.now() - startTime;
-        console.log(`[HTTP] ← ${req.method} ${req.url} - ${event.status} (${duration}ms)`, {
-          status: event.status,
-          statusText: event.statusText,
-          body: event.body
-        });
+        // TODO: Send to external logging service in production
       }
     }),
     catchError((error: HttpErrorResponse) => {

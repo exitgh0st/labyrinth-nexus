@@ -29,18 +29,18 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
   },
 
-  // Settings route (requires specific permission)
+  // Settings route (authentication required)
   {
     path: 'settings',
     loadComponent: () => import('./features/settings/pages/settings/settings').then(m => m.Settings),
-    canActivate: [authGuard, roleGuard(undefined)]
+    canActivate: [authGuard]
   },
 
   // User management routes (requires admin role)
   {
     path: 'admin/users',
     loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES),
-    // canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
+    canActivate: [authGuard, roleGuard([RoleEnum.ADMIN])]
   },
 
   // Role management routes (requires admin role)

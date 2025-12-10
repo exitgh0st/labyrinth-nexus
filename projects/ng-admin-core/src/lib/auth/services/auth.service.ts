@@ -75,7 +75,6 @@ export class AuthService {
       const response = await firstValueFrom(this.refreshToken());
       this.setAuth(response);
     } catch (error) {
-      console.log('Auth initialization - no valid session');
       this.clearAuth();
     } finally {
       this.isInitialized.set(true);
@@ -386,7 +385,6 @@ export class AuthService {
     if (!timeout) return;
 
     this.inactivityTimer = setTimeout(() => {
-      console.log('Session timed out due to inactivity');
       this.logout().subscribe();
     }, timeout);
   }
@@ -397,7 +395,6 @@ export class AuthService {
   private setupCrossTabSync(): void {
     window.addEventListener('storage', (event) => {
       if (event.key === 'auth_logout') {
-        console.log('Logout detected in another tab');
         this.clearAuth();
         this.router.navigate([this.authConfig.routes.login]);
       }

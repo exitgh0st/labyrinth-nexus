@@ -24,7 +24,6 @@ export class AppConfigService {
       this.config = await firstValueFrom(
         this.http.get<AppConfig>('/assets/config/app-config.json')
       );
-      console.log('App configuration loaded successfully:', this.config);
     } catch (error) {
       console.error('Failed to load app configuration, using defaults:', error);
       // Fallback to default configuration

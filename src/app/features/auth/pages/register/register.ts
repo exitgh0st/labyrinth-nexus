@@ -83,7 +83,6 @@ export class Register {
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
-      console.log(this.registerForm);
       this.registerForm.markAllAsTouched();
       return;
     }
