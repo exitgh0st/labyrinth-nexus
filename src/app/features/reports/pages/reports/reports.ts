@@ -15,11 +15,16 @@ import { FormsModule } from '@angular/forms';
 interface Report {
   id: string;
   name: string;
-  description: string;
-  icon: string;
-  color: string;
+  description?: string;
+  icon?: string;
+  color?: string;
   lastGenerated?: Date;
-  frequency: string;
+  frequency?: string;
+  // For recent/generated reports
+  type?: string;
+  generated?: Date;
+  size?: string;
+  status?: string;
 }
 
 interface ReportData {
@@ -104,8 +109,9 @@ export class Reports {
 
   displayedColumns: string[] = ['category', 'value', 'change', 'trend'];
 
-  recentReports = signal([
+  recentReports = signal<Report[]>([
     {
+      id: 'recent-1',
       name: 'Weekly User Activity',
       type: 'User Activity Report',
       generated: new Date(Date.now() - 1000 * 60 * 60 * 2),
@@ -113,6 +119,7 @@ export class Reports {
       status: 'completed'
     },
     {
+      id: 'recent-2',
       name: 'Monthly Revenue Summary',
       type: 'Revenue Analytics',
       generated: new Date(Date.now() - 1000 * 60 * 60 * 24),
@@ -120,6 +127,7 @@ export class Reports {
       status: 'completed'
     },
     {
+      id: 'recent-3',
       name: 'Security Audit Q1',
       type: 'Security Audit Log',
       generated: new Date(Date.now() - 1000 * 60 * 60 * 48),
@@ -128,7 +136,8 @@ export class Reports {
     },
   ]);
 
-  getRelativeTime(date: Date): string {
+  getRelativeTime(date?: Date): string {
+    if (!date) return 'N/A';
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / 60000);
