@@ -22,7 +22,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built application
-COPY --from=build /app/dist/labyrinth-vault/browser /usr/share/nginx/html
+COPY --from=build /app/dist/labyrinth-nexus/browser /usr/share/nginx/html
 
 # Copy config template for environment variable substitution
 COPY src/assets/config/app-config.example.json /usr/share/nginx/html/assets/config/app-config.template.json
